@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<h3 class="alert alert-primary"> meraba Abi ben suriyeli</h3>
+
+<button class="btn btn-primary" id="btnlist" type="button"> Ürün Listesi </button>
+<button class="btn btn-secondary" id="btncreate" type="button"> Ürün Ekle </button>
+<button class="btn btn-danger" id="btndelete" type="button"> Ürün Sil </button>
+<button class="btn btn-success" id="btnget" type="button"> Ürün Getir </button>
+<button class="btn btn-warning" id="btnupdate" type="button"> Ürün Güncelle </button>
+
+<hr />
+<div class="alert alert-info">Ürün Listesi</div>
+<div id="productlist">
+    
+</div>
+
+
+<div>
+    <div class="alert alert-info">Yeni Ürün Girişi</div>
+    <input type="text" id="txtname" placeholder="Ürün Adı" class="form-control"/>
+    <br />
+    <input type="text" id="txtprice" placeholder="Ürün fiyat" class="form-control"/>
+    <br />
+    <input type="text" id="txtstock" placeholder="Ürün stok" class="form-control" />
+    <br />
+</div>
+
+<script>
+    $("#btnlist").click(function () {
+        $.ajax({
+            contentType: "application/json",
+            dataType: "json",
+            type: "Get",
+            url: "/Default/ProductList/",
+            success: function (func1) {
+                let w = jQuery.parseJSON(func1);
+                console.log(w);
+
+                let tableHtml = "<table class=table table-hover>" +
+                    "<tr><th> Ürün ID</th> <th> Ürün Ad</th> <th> Ürün Fiyat</th> <th> Ürün Stok</th>  </tr>";
+
+                $.each(w, (index, value) => {
+                    tableHtml += `<tr><td>${value.ProductID}</td><td>${value.Name}</td><td>${value.Stock}</td><td>${value.Price}</td></tr>`
+
+                });
+                tableHtml += "</table>";
+                $("#productlist").html(tableHtml);
+                    
+            }
+        });
+    });
+
+    $("#btncreate").click(function () {
+        let productValues = {
+            Name: $("#txtname").val(),
+            Stock: $("#txtstock").val(),
+            Price: $("#txtprice").val()
+        };
+
+        $.ajax({
+            type: "Post",
+            url: "/Default/CreateProduct/",
+            data: productValues,
+            success: function (funk2) {
+                let result = jQuery.parseJSON(funk2);
+                swal("Tebrikler!", "Ürün Başarı İle Eklendi!", "success");
+            }
+        });
+    });
+
+</script>
