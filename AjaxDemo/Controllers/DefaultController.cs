@@ -53,7 +53,7 @@ namespace AjaxDemo.Controllers
             _context.SaveChanges();
             return NoContent();
         }
-
+      
         public IActionResult GetProduct(int id)
         {
             var value = _context.Products.Find(id);
